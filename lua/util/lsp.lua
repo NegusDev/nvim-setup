@@ -29,7 +29,7 @@ M.on_attach = function(client, bufnr)
 	end
 
   if client.name == "intelephense" then
-    mapkey("<leader>php", "", "n", opts)
+    mapkey("<S-A-F>", ":lua vim.lsp.buf.formatting()<CR>", "n", opts)
   end
 end
 

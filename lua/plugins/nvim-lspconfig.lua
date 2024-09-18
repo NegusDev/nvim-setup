@@ -105,9 +105,17 @@ local config = function()
     on_attach = on_attach,
     filetypes = {"php"},
     root_dir = lspconfig.util.root_pattern("composer.json", ".git"),
+    commands = {
+        Format = {
+            function()
+                vim.lsp.buf.formatting_sync(nil, 1000)  -- Trigger formatting
+            end,
+        },
+    },
     settings = {
       environment = {
         phpVersion = "8.3.11",
+        includePaths = {vim.fn.expand("~/.config/composer"), "/var/www/html",}
       },
       intelephense = {
         codeLens = {},
@@ -162,7 +170,15 @@ local config = function()
           shortOpenTag = true
         },
         runtime = "",
-        stubs = {},
+        stubs = {
+            "apache", "bcmath", "bz2", "calendar", "Core", "curl", "date", "dom",
+            "exif", "FFI", "fileinfo", "filter", "ftp", "gd", "gettext", "hash",
+            "iconv", "imap", "intl", "json", "libxml", "mbstring", "mysqli",
+            "mysqlnd", "openssl", "pcre", "PDO", "pdo_mysql", "pdo_sqlite",
+            "Phar", "readline", "Reflection", "session", "SimpleXML", "sockets",
+            "sodium", "SPL", "sqlite3", "standard", "tokenizer", "xml", "xmlreader",
+            "xmlwriter", "xsl", "zip", "zlib"
+        },
         telemetry = {
           enabled = true,
         },
@@ -207,9 +223,8 @@ local config = function()
 	local hadolint = require("efmls-configs.linters.hadolint")
 	local cpplint = require("efmls-configs.linters.cpplint")
 	local clangformat = require("efmls-configs.formatters.clang_format")
-  local phpcs = require("efmls-configs.linters.phpcs")
+  local phplint = require("efmls-configs.linters.php")
   local phpcbf = require("efmls-configs.formatters.phpcbf")
-  
 
 	-- configure efm server
 	lspconfig.efm.setup({
@@ -261,7 +276,7 @@ local config = function()
 				css = { prettier_d },
 				c = { clangformat, cpplint },
 				cpp = { clangformat, cpplint },
-        php = {phpcbf, phpcs},
+        php = {phpcbf, phplint},
 			},
 		},
 	})
